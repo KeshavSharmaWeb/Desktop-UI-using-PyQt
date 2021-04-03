@@ -1120,11 +1120,11 @@ class Ui_Form(object):
                             source=sourceTargetDf['sourceID'],
                             target=sourceTargetDf['targetID'],
                             value=sourceTargetDf['count'],
-                            color = "rgb(120, 120, 120)"
+                            
                             
                         ))
 
-            layout = dict(title="", font=dict(size=10), paper_bgcolor="rgb(56, 56, 56)")
+            layout = dict(title="", font=dict(size=10), paper_bgcolor="white")
 
             fig = dict(data=[data], layout=layout)
             return fig
