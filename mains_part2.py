@@ -8,7 +8,7 @@
 import os
 from typing import Dict, Any
 import csv
-from matplotlib import pyplot as plt
+import plotly.graph_objects as plt
 import pandas
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QTableWidgetItem, QListWidgetItem, QMainWindow, QApplication
@@ -27,7 +27,7 @@ source_excel = pandas.read_excel(
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(1760, 661)
+        Form.resize(1900, 1000)
         Form.setStyleSheet("background-color: rgb(121, 121, 121)")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -1059,8 +1059,8 @@ class Ui_Form(object):
         self.business_units_value.setText(self.open_sheet("Business Unit"))
 
         self.verticalLayout_28 = QtWidgets.QVBoxLayout(self.business_units)
-        self.verticalLayout_28.setContentsMargins(4, 4, 4, 4)
-        self.verticalLayout_28.setSpacing(4)
+        self.verticalLayout_28.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_28.setSpacing(0)
         self.verticalLayout_28.setObjectName("verticalLayout_28")
 
         # self.horizontalLayout_11.addWidget(self.business_units)
@@ -1072,7 +1072,7 @@ class Ui_Form(object):
 
         def genSankey(df, cat_cols=[], value_cols='', title='Sankey Diagram'):
             # maximum of 6 value cols -> 6 colors
-            colorPalette = ['#FFD43B', '#646464', '#4B8BBE', '#306998']
+            colorPalette = ['#FFD43B','#646464','#4B8BBE','#306998']
             labelList = []
             colorNumList = []
             for catCol in cat_cols:
@@ -1085,7 +1085,6 @@ class Ui_Form(object):
 
             # define colors based on number of levels
             colorList = []
-            link_color = ["#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", "#E2CFCF", "#E7DDDC", "#D9C3B7", "#E6B426", "#DDCB76", "#FFF1A9", ]
             for idx, colorNum in enumerate(colorNumList):
                 colorList = colorList + [colorPalette[idx]] * colorNum
 
@@ -1113,16 +1112,16 @@ class Ui_Form(object):
 
             # creating the sankey diagram
             data = dict(type='sankey',
-                        node=dict(pad=15,
-                                  thickness=10,
-                                  line=dict(color="black", width=1),
+                        node=dict(pad=10,
+                                  thickness=30,
                                   label=labelList,
                                   color=colorList),
                         link=dict(
                             source=sourceTargetDf['sourceID'],
                             target=sourceTargetDf['targetID'],
                             value=sourceTargetDf['count'],
-                            color = link_color
+                            color = "rgb(120, 120, 120)"
+                            
                         ))
 
             layout = dict(title="", font=dict(size=10), paper_bgcolor="rgb(56, 56, 56)")
@@ -1135,13 +1134,14 @@ class Ui_Form(object):
                         value_cols='count_data',
                         title='Sankey Diagram(Process VS Risk VS Control)')
 
-        html = '<html><body>'
+        html = '<html><body style="background-color:rgb(56, 56, 56); width:112%; height:150%; margin-top:-90px; margin-left:-80px; overflow-x:hidden;">'
         html += plotly.offline.plot(fig,
                                     output_type='div',
                                     include_plotlyjs='cdn')
         html += '</body></html>'
 
-        self.webEngineView = QtWebEngineWidgets.QWebEngineView(self.frame_18)
+        self.webEngineView = QtWebEngineWidgets.QWebEngineView(self.business_units)
+        self.webEngineView.setZoomFactor(1.14)
         self.webEngineView.setHtml(html)
         self.verticalLayout_23.addWidget(self.webEngineView)
 
@@ -1196,9 +1196,22 @@ class Ui_Form(object):
         self.label_21.setStyleSheet("color:white")
         self.label_21.setObjectName("label_21")
         self.verticalLayout_38.addWidget(self.label_21)
-        self.Stat_Control_1_Chart = QtWidgets.QWidget(self.frame_30)
-        self.Stat_Control_1_Chart.setStyleSheet("background-color:white")
+
+        # CONTROL ASSOCIATED TO PROCESS CHART
+        control_process = self.piechart("Process Domain", "Control ID")
+
+        control_process_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        control_process_html += plotly.offline.plot(control_process,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        control_process_html+='</body></html>'
+
+        self.Stat_Control_1_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_1_Chart.setHtml(control_process_html)
         self.Stat_Control_1_Chart.setObjectName("Stat_Control_1_Chart")
+
         self.verticalLayout_38.addWidget(self.Stat_Control_1_Chart)
         self.verticalLayout_38.setStretch(0, 3)
         self.verticalLayout_38.setStretch(1, 24)
@@ -1218,9 +1231,22 @@ class Ui_Form(object):
         self.label_22.setStyleSheet("color:white")
         self.label_22.setObjectName("label_22")
         self.verticalLayout_37.addWidget(self.label_22)
-        self.Stat_Control_2_Chart = QtWidgets.QWidget(self.frame_31)
-        self.Stat_Control_2_Chart.setStyleSheet("background-color:white")
+
+        # CONTROL ASSOCIATED TO RISK CHART
+        control_risk = self.piechart("Risk ID", "Control ID")
+
+        control_risk_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        control_risk_html += plotly.offline.plot(control_risk,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        control_risk_html+='</body></html>'
+
+        self.Stat_Control_2_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_2_Chart.setHtml(control_risk_html)
         self.Stat_Control_2_Chart.setObjectName("Stat_Control_2_Chart")
+
         self.verticalLayout_37.addWidget(self.Stat_Control_2_Chart)
         self.verticalLayout_37.setStretch(0, 3)
         self.verticalLayout_37.setStretch(1, 24)
@@ -1240,9 +1266,22 @@ class Ui_Form(object):
         self.label_23.setStyleSheet("color:white")
         self.label_23.setObjectName("label_23")
         self.verticalLayout_36.addWidget(self.label_23)
-        self.Stat_Control_3_Chart = QtWidgets.QWidget(self.frame_32)
-        self.Stat_Control_3_Chart.setStyleSheet("background-color:white")
+        # CONTROL ASSOCIATED TO PROCESS CHART
+        control_control_owner = self.piechart("Control Owner", "Control ID")
+
+        control_control_owner_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        control_control_owner_html += plotly.offline.plot(control_control_owner,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        control_control_owner_html+='</body></html>'
+
+        self.Stat_Control_3_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_3_Chart.setHtml(control_control_owner_html)
         self.Stat_Control_3_Chart.setObjectName("Stat_Control_3_Chart")
+
+
         self.verticalLayout_36.addWidget(self.Stat_Control_3_Chart)
         self.verticalLayout_36.setStretch(0, 3)
         self.verticalLayout_36.setStretch(1, 24)
@@ -1262,9 +1301,22 @@ class Ui_Form(object):
         self.label_25.setStyleSheet("color:white")
         self.label_25.setObjectName("label_25")
         self.verticalLayout_34.addWidget(self.label_25)
-        self.Stat_Control_4_Chart = QtWidgets.QWidget(self.frame_33)
-        self.Stat_Control_4_Chart.setStyleSheet("background-color:white")
+        # CONTROL ASSOCIATED TO Business Unit CHART
+        control_business_unit = self.piechart("Business Unit", "Control ID")
+
+        control_business_unit_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        control_business_unit_html += plotly.offline.plot(control_business_unit,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        control_business_unit_html+='</body></html>'
+
+        self.Stat_Control_4_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_4_Chart.setHtml(control_business_unit_html)
         self.Stat_Control_4_Chart.setObjectName("Stat_Control_4_Chart")
+
+
         self.verticalLayout_34.addWidget(self.Stat_Control_4_Chart)
         self.verticalLayout_34.setStretch(0, 3)
         self.verticalLayout_34.setStretch(1, 24)
@@ -1403,13 +1455,32 @@ class Ui_Form(object):
         self.label_30.setStyleSheet("color:white")
         self.label_30.setObjectName("label_30")
         self.verticalLayout_42.addWidget(self.label_30)
-        self.Stat_Risk_Chart_1_1 = QtWidgets.QWidget(self.frame_41)
-        self.Stat_Risk_Chart_1_1.setStyleSheet("background-color:white\n" "")
+
+        # RISK ASSOCIATED TO PROCESS CHART
+        risk_process = self.piechart("Process Domain", "Risk ID")
+
+        risk_process_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        risk_process_html += plotly.offline.plot(risk_process,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_process_html+='</body></html>'
+
+        self.Stat_Risk_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_1_1.setHtml(risk_process_html)
         self.Stat_Risk_Chart_1_1.setObjectName("Stat_Risk_Chart_1_1")
+
+
         self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_1)
+
+
         self.Stat_Risk_Chart_1_2 = QtWidgets.QWidget(self.frame_41)
-        self.Stat_Risk_Chart_1_2.setStyleSheet("background-color:white\n" "")
+        self.Stat_Risk_Chart_1_2.setStyleSheet("background-color:white\n"
+"")
         self.Stat_Risk_Chart_1_2.setObjectName("Stat_Risk_Chart_1_2")
+
+
         self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_2)
         self.verticalLayout_42.setStretch(0, 2)
         self.verticalLayout_42.setStretch(1, 10)
@@ -1431,9 +1502,22 @@ class Ui_Form(object):
         self.label_31.setStyleSheet("color:white")
         self.label_31.setObjectName("label_31")
         self.verticalLayout_43.addWidget(self.label_31)
-        self.Stat_Risk_Chart_2_1 = QtWidgets.QWidget(self.frame_40)
-        self.Stat_Risk_Chart_2_1.setStyleSheet("background-color:white\n" "")
+
+                # RISK ASSOCIATED TO CONTROL CHART
+        risk_control = self.piechart("Control ID", "Risk ID")
+
+        risk_control_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        risk_control_html += plotly.offline.plot(risk_control,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_control_html+='</body></html>'
+
+        self.Stat_Risk_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_2_1.setHtml(risk_control_html)
         self.Stat_Risk_Chart_2_1.setObjectName("Stat_Risk_Chart_2_1")
+
         self.verticalLayout_43.addWidget(self.Stat_Risk_Chart_2_1)
         self.Stat_Risk_Chart_2_2 = QtWidgets.QWidget(self.frame_40)
         self.Stat_Risk_Chart_2_2.setStyleSheet("background-color:white\n" "")
@@ -1459,9 +1543,24 @@ class Ui_Form(object):
         self.label_32.setStyleSheet("color:white")
         self.label_32.setObjectName("label_32")
         self.verticalLayout_44.addWidget(self.label_32)
-        self.Stat_Risk_Chart_3_1 = QtWidgets.QWidget(self.frame_39)
-        self.Stat_Risk_Chart_3_1.setStyleSheet("background-color:white\n" "")
+
+        # RISK ASSOCIATED TO BUSINESS UNIT CHART
+
+        risk_business_unit = self.piechart("Business Unit", "Risk ID")
+
+        risk_business_unit_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        risk_business_unit_html += plotly.offline.plot(risk_business_unit,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_business_unit_html+='</body></html>'
+
+        self.Stat_Risk_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_3_1.setHtml(risk_business_unit_html)
         self.Stat_Risk_Chart_3_1.setObjectName("Stat_Risk_Chart_3_1")
+
+
         self.verticalLayout_44.addWidget(self.Stat_Risk_Chart_3_1)
         self.Stat_Risk_Chart_3_2 = QtWidgets.QWidget(self.frame_39)
         self.Stat_Risk_Chart_3_2.setStyleSheet("background-color:white\n" "")
@@ -1503,10 +1602,21 @@ class Ui_Form(object):
         self.label_36.setStyleSheet("color:white")
         self.label_36.setObjectName("label_36")
         self.verticalLayout_45.addWidget(self.label_36)
-        self.Stat_Process_Chart_1_1 = QtWidgets.QWidget(self.frame_46)
-        self.Stat_Process_Chart_1_1.setStyleSheet("background-color:white\n"
-                                                  "")
+                # Process ASSOCIATED TO PROCESS DOMAIN CHART
+        process_processdomain = self.piechart("Process Domain", "Process ID")
+
+        process_processdomain_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        process_processdomain_html += plotly.offline.plot(process_processdomain,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        process_processdomain_html+='</body></html>'
+
+        self.Stat_Process_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_1_1.setHtml(process_processdomain_html)
         self.Stat_Process_Chart_1_1.setObjectName("Stat_Process_Chart_1_1")
+
         self.verticalLayout_45.addWidget(self.Stat_Process_Chart_1_1)
         self.Stat_Process_Chart_1_2 = QtWidgets.QWidget(self.frame_46)
         self.Stat_Process_Chart_1_2.setStyleSheet("background-color:white\n"
@@ -1532,10 +1642,22 @@ class Ui_Form(object):
         self.label_34.setStyleSheet("color:white")
         self.label_34.setObjectName("label_34")
         self.verticalLayout_46.addWidget(self.label_34)
-        self.Stat_Process_Chart_2_1 = QtWidgets.QWidget(self.frame_45)
-        self.Stat_Process_Chart_2_1.setStyleSheet("background-color:white\n"
-                                                  "")
+         # Process ASSOCIATED TO Business Unit CHART
+        process_business_unit = self.piechart("Business Unit", "Process ID")
+
+        process_business_unit_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        process_business_unit_html += plotly.offline.plot(process_business_unit,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        process_business_unit_html+='</body></html>'
+
+        self.Stat_Process_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_2_1.setHtml(process_business_unit_html)
         self.Stat_Process_Chart_2_1.setObjectName("Stat_Process_Chart_2_1")
+
+
         self.verticalLayout_46.addWidget(self.Stat_Process_Chart_2_1)
         self.Stat_Process_Chart_2_2 = QtWidgets.QWidget(self.frame_45)
         self.Stat_Process_Chart_2_2.setStyleSheet("background-color:white\n"
@@ -1561,10 +1683,22 @@ class Ui_Form(object):
         self.label_35.setStyleSheet("color:white")
         self.label_35.setObjectName("label_35")
         self.verticalLayout_48.addWidget(self.label_35)
-        self.Stat_Process_Chart_3_1 = QtWidgets.QWidget(self.frame_43)
-        self.Stat_Process_Chart_3_1.setStyleSheet("background-color:white\n"
-                                                  "")
+         # control ASSOCIATED TO process domain CHART
+        processdomain_control = self.piechart("Process Domain", "Control ID")
+
+        processdomain_control_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        processdomain_control_html += plotly.offline.plot(processdomain_control,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        processdomain_control_html+='</body></html>'
+
+        self.Stat_Process_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_3_1.setHtml(processdomain_control_html)
         self.Stat_Process_Chart_3_1.setObjectName("Stat_Process_Chart_3_1")
+
+
         self.verticalLayout_48.addWidget(self.Stat_Process_Chart_3_1)
         self.Stat_Process_Chart_3_2 = QtWidgets.QWidget(self.frame_43)
         self.Stat_Process_Chart_3_2.setStyleSheet("background-color:white\n"
@@ -1590,10 +1724,22 @@ class Ui_Form(object):
         self.label_37.setStyleSheet("color:white")
         self.label_37.setObjectName("label_37")
         self.verticalLayout_47.addWidget(self.label_37)
-        self.Stat_Process_Chart_4_1 = QtWidgets.QWidget(self.frame_44)
-        self.Stat_Process_Chart_4_1.setStyleSheet("background-color:white\n"
-                                                  "")
+         # Risk ASSOCIATED TO Process Domain CHART
+        processdomain_risk = self.piechart("Process Domain", "Risk ID")
+
+        processdomain_risk_html = '<html><body style="width: 310px; overflow:hidden;">'
+
+        processdomain_risk_html += plotly.offline.plot(processdomain_risk,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        processdomain_risk_html+='</body></html>'
+
+        self.Stat_Process_Chart_4_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_4_1.setHtml(processdomain_risk_html)
         self.Stat_Process_Chart_4_1.setObjectName("Stat_Process_Chart_4_1")
+
+
         self.verticalLayout_47.addWidget(self.Stat_Process_Chart_4_1)
         self.Stat_Process_Chart_4_2 = QtWidgets.QWidget(self.frame_44)
         self.Stat_Process_Chart_4_2.setStyleSheet("background-color:white\n"
@@ -2011,18 +2157,22 @@ class Ui_Form(object):
         return str(len_uniq)
 
 
-#     def piechart(self):
-#             df = pandas.read_excel("static\Input\Input Data + Sample output.xlsx", sheet_name="Sheet1")
-#             _uniq = df["Process Domain"].unique()
-#             controls_to_process = df["Control ID"].unique()
-#             data = ""
+    def piechart(self, first, second):
+            df = pandas.read_excel("static\Input\Input Data + Sample output.xlsx", sheet_name="Sheet1")
 
-#             #Creating Plot
+            labels = df[f"{first}"].unique()
 
-#             fig = plt.figure(figsize=(10, 7))
-#             plt.pie(data, labels = _uniq)
+            values = []
 
-#             plt.show()
+            for i in labels:
+                control_id = len(df.loc[df[f'{first}'] == i, f'{second}'])
+                values.append(control_id)
+
+            fig = plt.Figure(data=[plt.Pie(labels=labels, values=values)])
+            fig.update(layout_showlegend=False)
+            fig.update_layout(margin=dict(t=1, b=1, l=2, r=4))
+
+            return fig
 
     def displayfilecontentIntable(self, inputfilepath):
         data = pandas.read_excel(inputfilepath)
