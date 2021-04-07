@@ -25,7 +25,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 output_type = ".XML"
 source_excel = pandas.read_excel(
-    "static\Input\Input Data + Sample output.xlsx", sheet_name="Sheet1")
+    "static\do not delete.xlsx", sheet_name="Sheet1")
 setdefaulthtml = '<html><body style="background-color:rgb(56, 56, 56);"></body></html>'
 
 class Ui_Form(object):
@@ -2007,7 +2007,7 @@ class Ui_Form(object):
         self.RCMInput_lineEdi_50.setText(filename)
         source_excel = filename
         if filename:
-            target_path = "static\Input\Input Data + Sample output.xlsx"
+            target_path = "static\do not delete.xlsx"
             shutil.copyfile(filename, target_path)
             os.execl(sys.executable, sys.executable, * sys.argv)
          
