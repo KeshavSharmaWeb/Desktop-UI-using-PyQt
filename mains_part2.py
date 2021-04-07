@@ -13,6 +13,7 @@ import plotly.graph_objects as plt
 import pandas
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QTableWidgetItem, QListWidgetItem, QMainWindow, QApplication
+from PyQt5.QtCore import QProcess
 import plotly
 import chart_studio.plotly as py
 import MyDtModule as my
@@ -25,11 +26,11 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 output_type = ".XML"
 source_excel = pandas.read_excel(
-    "static\Input\Input Data + Sample output.xlsx", sheet_name="Sheet1")
+    "static\do not delete.xlsx", sheet_name="Sheet1")
 setdefaulthtml = '<html><body style="background-color:rgb(56, 56, 56);"></body></html>'
 
 class Ui_Form(object):
-    def setupUi(self, Form):
+    def setupUi(self, Form, file_selected = False):
         global control_process_html
         global control_risk_html
         global control_control_owner_html
@@ -2002,16 +2003,17 @@ class Ui_Form(object):
         self.label_28.setAlignment(QtCore.Qt.AlignCenter)
         self.label_29.setAlignment(QtCore.Qt.AlignCenter)
 
+
     def data(self):
         filename = QtWidgets.QFileDialog.getOpenFileName(None, "Select a file", "", "Excel files (*.csv *.xlsx)")[0]
         self.RCMInput_lineEdi_50.setText(filename)
         source_excel = filename
         if filename:
-            target_path = "static\Input\Input Data + Sample output.xlsx"
+            target_path = "static\do not delete.xlsx"
             shutil.copyfile(filename, target_path)
-            os.execl(sys.executable, sys.executable, * sys.argv)
-         
-
+            os.system('python run.py')
+            sys.exit()
+            
     def show_charts(self):
         self.verticalLayout_20.addWidget(self.frame_17)
         # SETTING HTML FOR CHARTS
@@ -2728,7 +2730,7 @@ if __name__ == "__main__":
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
-    ui.show_charts()
+    # ui.show_charts()
     Form.show()
     sys.exit(app.exec_())
     app.exec_()
