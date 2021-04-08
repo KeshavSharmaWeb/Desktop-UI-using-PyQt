@@ -25,12 +25,10 @@ import subprocess
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 output_type = ".XML"
-source_excel = pandas.read_excel(
-    "static\do not delete.xlsx", sheet_name="Sheet1")
 setdefaulthtml = '<html><body style="background-color:rgb(56, 56, 56);"></body></html>'
 
 class Ui_Form(object):
-    def setupUi(self, Form, file_selected = False):
+    def setupUi(self, Form):
         global control_process_html
         global control_risk_html
         global control_control_owner_html
@@ -959,17 +957,6 @@ class Ui_Form(object):
         self.RCMInput_pushButton_50.setText("Browse")
         self.horizontalLayout_50.addWidget(self.RCMInput_pushButton_50)
 
-        self.clear_button = QtWidgets.QPushButton(self.frame_50)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(False)
-        font.setWeight(50)
-        self.clear_button.setFont(font)
-        self.clear_button.setStyleSheet(
-            "background-color:rgb(255, 177, 41);")
-        self.clear_button.setObjectName("clear_button")
-        self.clear_button.setText("Clear")
-        self.horizontalLayout_50.addWidget(self.clear_button)
         self.verticalLayout_20.addWidget(self.frame_50)
 
         self.frame_17 = QtWidgets.QFrame(self.PRC_stat)
@@ -1019,7 +1006,7 @@ class Ui_Form(object):
             "\n"
             "background-color:rgb(160, 160, 160);")
         self.process_domain_value.setObjectName("process_domain_value")
-        self.process_domain_value.setText(self.open_sheet("Process Domain"))
+        self.process_domain_value.setText('')
 
         self.owners = QtWidgets.QLabel(self.frame_18)
         self.owners.setGeometry(QtCore.QRect(831, 40, 251, 91))
@@ -1048,7 +1035,7 @@ class Ui_Form(object):
         self.owners_value.setStyleSheet("\n"
                                         "background-color:rgb(160, 160, 160);")
         self.owners_value.setObjectName("owners_value")
-        self.owners_value.setText(self.open_sheet("Control Owner"))
+        self.owners_value.setText('')
 
         self.controls = QtWidgets.QLabel(self.frame_18)
         self.controls.setGeometry(QtCore.QRect(574, 40, 251, 91))
@@ -1079,7 +1066,7 @@ class Ui_Form(object):
             "\n"
             "background-color:rgb(160, 160, 160);")
         self.controls_value.setObjectName("controls_value")
-        self.controls_value.setText(self.open_sheet("Control ID"))
+        self.controls_value.setText('')
 
         self.risks = QtWidgets.QLabel(self.frame_18)
         self.risks.setGeometry(QtCore.QRect(317, 40, 251, 91))
@@ -1109,7 +1096,7 @@ class Ui_Form(object):
         self.risks_value.setStyleSheet("\n"
                                        "background-color:rgb(160, 160, 160);")
         self.risks_value.setObjectName("risks_value")
-        self.risks_value.setText(self.open_sheet("Risk ID"))
+        self.risks_value.setText('')
 
         self.business_units = QtWidgets.QLabel(self.frame_18)
         self.business_units.setGeometry(QtCore.QRect(1088, 40, 251, 91))
@@ -1141,7 +1128,7 @@ class Ui_Form(object):
             "\n"
             "background-color:rgb(160, 160, 160);")
         self.business_units_value.setObjectName("business_units_value")
-        self.business_units_value.setText(self.open_sheet("Business Unit"))
+        self.business_units_value.setText('')
         self.verticalLayout_23.addWidget(self.frame_18)
         self.frame_19 = QtWidgets.QFrame(self.frame_17)
         self.frame_19.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -1163,7 +1150,555 @@ class Ui_Form(object):
         self.verticalLayout_29.setObjectName("verticalLayout_29")
         self.verticalLayout_29.setStretch(0, 1)
         self.verticalLayout_29.setStretch(1, 20)
-        def genSankey(df, cat_cols=[], value_cols='', title='Sankey Diagram'):
+        self.webEngineView = QtWebEngineWidgets.QWebEngineView(self.frame_25)
+        self.webEngineView.setZoomFactor(1.14)
+        
+        self.verticalLayout_29.addWidget(self.webEngineView)
+
+        self.horizontalLayout_17.addWidget(self.frame_25)
+        self.verticalLayout_23.addWidget(self.frame_19)
+        self.verticalLayout_23.setStretch(0, 2)
+        self.verticalLayout_23.setStretch(1, 7)
+        self.verticalLayout_22.addLayout(self.verticalLayout_20)
+        self.stackedWidget.addWidget(self.PRC_stat)
+        self.Control_stat = QtWidgets.QWidget()
+        self.Control_stat.setObjectName("Control_stat")
+        self.verticalLayout_32 = QtWidgets.QVBoxLayout(self.Control_stat)
+        self.verticalLayout_32.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_32.setSpacing(0)
+        self.verticalLayout_32.setObjectName("verticalLayout_32")
+        self.verticalLayout_31 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_31.setObjectName("verticalLayout_31")
+        self.frame_27 = QtWidgets.QFrame(self.Control_stat)
+        self.frame_27.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_27.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_27.setObjectName("frame_27")
+        self.verticalLayout_33 = QtWidgets.QVBoxLayout(self.frame_27)
+        self.verticalLayout_33.setObjectName("verticalLayout_33")
+        self.frame_29 = QtWidgets.QFrame(self.frame_27)
+        self.frame_29.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_29.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_29.setObjectName("frame_29")
+        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.frame_29)
+        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
+        self.frame_30 = QtWidgets.QFrame(self.frame_29)
+        self.frame_30.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_30.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_30.setObjectName("frame_30")
+        self.verticalLayout_38 = QtWidgets.QVBoxLayout(self.frame_30)
+        self.verticalLayout_38.setObjectName("verticalLayout_38")
+        self.label_21 = QtWidgets.QLabel(self.frame_30)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_21.setFont(font)
+        self.label_21.setStyleSheet("color:white")
+        self.label_21.setObjectName("label_21")
+        self.verticalLayout_38.addWidget(self.label_21)
+
+        
+        self.Stat_Control_1_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_1_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_1_Chart.setObjectName("Stat_Control_1_Chart")
+
+        self.verticalLayout_38.addWidget(self.Stat_Control_1_Chart)
+        self.verticalLayout_38.setStretch(0, 3)
+        self.verticalLayout_38.setStretch(1, 24)
+        self.horizontalLayout_19.addWidget(self.frame_30)
+        self.frame_31 = QtWidgets.QFrame(self.frame_29)
+        self.frame_31.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_31.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_31.setObjectName("frame_31")
+        self.verticalLayout_37 = QtWidgets.QVBoxLayout(self.frame_31)
+        self.verticalLayout_37.setObjectName("verticalLayout_37")
+        self.label_22 = QtWidgets.QLabel(self.frame_31)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_22.setFont(font)
+        self.label_22.setStyleSheet("color:white")
+        self.label_22.setObjectName("label_22")
+        self.verticalLayout_37.addWidget(self.label_22)
+
+       
+        self.Stat_Control_2_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_2_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_2_Chart.setObjectName("Stat_Control_2_Chart")
+
+        self.verticalLayout_37.addWidget(self.Stat_Control_2_Chart)
+        self.verticalLayout_37.setStretch(0, 3)
+        self.verticalLayout_37.setStretch(1, 24)
+        self.horizontalLayout_19.addWidget(self.frame_31)
+        self.frame_32 = QtWidgets.QFrame(self.frame_29)
+        self.frame_32.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_32.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_32.setObjectName("frame_32")
+        self.verticalLayout_36 = QtWidgets.QVBoxLayout(self.frame_32)
+        self.verticalLayout_36.setObjectName("verticalLayout_36")
+        self.label_23 = QtWidgets.QLabel(self.frame_32)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_23.setFont(font)
+        self.label_23.setStyleSheet("color:white")
+        self.label_23.setObjectName("label_23")
+        self.verticalLayout_36.addWidget(self.label_23)
+        
+        self.Stat_Control_3_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_3_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_3_Chart.setObjectName("Stat_Control_3_Chart")
+
+
+        self.verticalLayout_36.addWidget(self.Stat_Control_3_Chart)
+        self.verticalLayout_36.setStretch(0, 3)
+        self.verticalLayout_36.setStretch(1, 24)
+        self.horizontalLayout_19.addWidget(self.frame_32)
+        self.frame_33 = QtWidgets.QFrame(self.frame_29)
+        self.frame_33.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_33.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_33.setObjectName("frame_33")
+        self.verticalLayout_34 = QtWidgets.QVBoxLayout(self.frame_33)
+        self.verticalLayout_34.setObjectName("verticalLayout_34")
+        self.label_25 = QtWidgets.QLabel(self.frame_33)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_25.setFont(font)
+        self.label_25.setStyleSheet("color:white")
+        self.label_25.setObjectName("label_25")
+        self.verticalLayout_34.addWidget(self.label_25)
+        
+        self.Stat_Control_4_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_4_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_4_Chart.setObjectName("Stat_Control_4_Chart")
+
+
+        self.verticalLayout_34.addWidget(self.Stat_Control_4_Chart)
+        self.verticalLayout_34.setStretch(0, 3)
+        self.verticalLayout_34.setStretch(1, 24)
+        self.horizontalLayout_19.addWidget(self.frame_33)
+        self.verticalLayout_33.addWidget(self.frame_29)
+        self.frame_28 = QtWidgets.QFrame(self.frame_27)
+        self.frame_28.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_28.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_28.setObjectName("frame_28")
+        self.horizontalLayout_18 = QtWidgets.QHBoxLayout(self.frame_28)
+        self.horizontalLayout_18.setObjectName("horizontalLayout_18")
+        self.frame_34 = QtWidgets.QFrame(self.frame_28)
+        self.frame_34.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_34.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_34.setObjectName("frame_34")
+        self.verticalLayout_35 = QtWidgets.QVBoxLayout(self.frame_34)
+        self.verticalLayout_35.setObjectName("verticalLayout_35")
+        self.label_29 = QtWidgets.QLabel(self.frame_34)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_29.setFont(font)
+        self.label_29.setStyleSheet("color:white")
+        self.label_29.setObjectName("label_29")
+        self.verticalLayout_35.addWidget(self.label_29)
+        
+        self.Stat_Control_5_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_5_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_5_Chart.setObjectName("Stat_Control_5_Chart")
+
+        self.verticalLayout_35.addWidget(self.Stat_Control_5_Chart)
+        self.verticalLayout_35.setStretch(0, 1)
+        self.verticalLayout_35.setStretch(1, 20)
+        self.horizontalLayout_18.addWidget(self.frame_34)
+        self.frame_35 = QtWidgets.QFrame(self.frame_28)
+        self.frame_35.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_35.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_35.setObjectName("frame_35")
+        self.verticalLayout_41 = QtWidgets.QVBoxLayout(self.frame_35)
+        self.verticalLayout_41.setObjectName("verticalLayout_41")
+        self.label_28 = QtWidgets.QLabel(self.frame_35)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_28.setFont(font)
+        self.label_28.setStyleSheet("color:white")
+        self.label_28.setObjectName("label_28")
+        self.verticalLayout_41.addWidget(self.label_28)
+        
+        self.Stat_Control_6_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_6_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_6_Chart.setObjectName("Stat_Control_6_Chart")
+
+        self.verticalLayout_41.addWidget(self.Stat_Control_6_Chart)
+        self.verticalLayout_41.setStretch(0, 1)
+        self.verticalLayout_41.setStretch(1, 20)
+        self.horizontalLayout_18.addWidget(self.frame_35)
+        self.frame_36 = QtWidgets.QFrame(self.frame_28)
+        self.frame_36.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_36.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_36.setObjectName("frame_36")
+        self.verticalLayout_40 = QtWidgets.QVBoxLayout(self.frame_36)
+        self.verticalLayout_40.setObjectName("verticalLayout_40")
+        self.label_27 = QtWidgets.QLabel(self.frame_36)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_27.setFont(font)
+        self.label_27.setStyleSheet("color:white")
+        self.label_27.setObjectName("label_27")
+        self.verticalLayout_40.addWidget(self.label_27)
+        
+        self.Stat_Control_7_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_7_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_7_Chart.setObjectName("Stat_Control_7_Chart")
+
+        self.verticalLayout_40.addWidget(self.Stat_Control_7_Chart)
+        self.verticalLayout_40.setStretch(0, 1)
+        self.verticalLayout_40.setStretch(1, 20)
+        self.horizontalLayout_18.addWidget(self.frame_36)
+        self.frame_37 = QtWidgets.QFrame(self.frame_28)
+        self.frame_37.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_37.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_37.setObjectName("frame_37")
+        self.verticalLayout_39 = QtWidgets.QVBoxLayout(self.frame_37)
+        self.verticalLayout_39.setObjectName("verticalLayout_39")
+        self.label_26 = QtWidgets.QLabel(self.frame_37)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_26.setFont(font)
+        self.label_26.setStyleSheet("color:white")
+        self.label_26.setObjectName("label_26")
+        self.verticalLayout_39.addWidget(self.label_26)
+        
+        self.Stat_Control_8_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Control_8_Chart.setHtml(setdefaulthtml)
+        self.Stat_Control_8_Chart.setObjectName("Stat_Control_8_Chart")
+        self.verticalLayout_39.addWidget(self.Stat_Control_8_Chart)
+        self.verticalLayout_39.setStretch(0, 3)
+        self.verticalLayout_39.setStretch(1, 24)
+        self.horizontalLayout_18.addWidget(self.frame_37)
+        self.verticalLayout_33.addWidget(self.frame_28)
+        self.verticalLayout_33.setStretch(0, 1)
+        self.verticalLayout_33.setStretch(1, 1)
+        self.verticalLayout_31.addWidget(self.frame_27)
+        self.verticalLayout_32.addLayout(self.verticalLayout_31)
+        self.stackedWidget.addWidget(self.Control_stat)
+        self.Risk_stat = QtWidgets.QWidget()
+        self.Risk_stat.setObjectName("Risk_stat")
+        self.horizontalLayout_21 = QtWidgets.QHBoxLayout(self.Risk_stat)
+        self.horizontalLayout_21.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_21.setSpacing(0)
+        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
+        self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_20.setSpacing(50)
+        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
+        self.frame_38 = QtWidgets.QFrame(self.Risk_stat)
+        self.frame_38.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_38.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_38.setObjectName("frame_38")
+        self.horizontalLayout_22 = QtWidgets.QHBoxLayout(self.frame_38)
+        self.horizontalLayout_22.setContentsMargins(30, 0, 30, 0)
+        self.horizontalLayout_22.setSpacing(40)
+        self.horizontalLayout_22.setObjectName("horizontalLayout_22")
+        self.frame_41 = QtWidgets.QFrame(self.frame_38)
+        self.frame_41.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_41.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_41.setObjectName("frame_41")
+        self.verticalLayout_42 = QtWidgets.QVBoxLayout(self.frame_41)
+        self.verticalLayout_42.setSpacing(10)
+        self.verticalLayout_42.setObjectName("verticalLayout_42")
+        self.label_30 = QtWidgets.QLabel(self.frame_41)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_30.setFont(font)
+        self.label_30.setStyleSheet("color:white")
+        self.label_30.setObjectName("label_30")
+        self.verticalLayout_42.addWidget(self.label_30)
+
+        
+        self.Stat_Risk_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_1_1.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_1_1.setObjectName("Stat_Risk_Chart_1_1")
+
+
+        self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_1)
+
+
+        self.Stat_Risk_Chart_1_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_1_2.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_1_2.setObjectName("Stat_Risk_Chart_1_2")
+
+
+        self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_2)
+        self.verticalLayout_42.setStretch(0, 2)
+        self.verticalLayout_42.setStretch(1, 10)
+        self.verticalLayout_42.setStretch(2, 16)
+        self.horizontalLayout_22.addWidget(self.frame_41)
+        self.frame_40 = QtWidgets.QFrame(self.frame_38)
+        self.frame_40.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_40.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_40.setObjectName("frame_40")
+        self.verticalLayout_43 = QtWidgets.QVBoxLayout(self.frame_40)
+        self.verticalLayout_43.setSpacing(10)
+        self.verticalLayout_43.setObjectName("verticalLayout_43")
+        self.label_31 = QtWidgets.QLabel(self.frame_40)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_31.setFont(font)
+        self.label_31.setStyleSheet("color:white")
+        self.label_31.setObjectName("label_31")
+        self.verticalLayout_43.addWidget(self.label_31)
+
+        
+        self.Stat_Risk_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_2_1.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_2_1.setObjectName("Stat_Risk_Chart_2_1")
+
+        self.verticalLayout_43.addWidget(self.Stat_Risk_Chart_2_1)
+
+        
+        self.Stat_Risk_Chart_2_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_2_2.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_2_2.setObjectName("Stat_Risk_Chart_2_2")
+
+        self.verticalLayout_43.addWidget(self.Stat_Risk_Chart_2_2)
+        self.verticalLayout_43.setStretch(0, 2)
+        self.verticalLayout_43.setStretch(1, 10)
+        self.verticalLayout_43.setStretch(2, 16)
+        self.horizontalLayout_22.addWidget(self.frame_40)
+        self.frame_39 = QtWidgets.QFrame(self.frame_38)
+        self.frame_39.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_39.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_39.setObjectName("frame_39")
+        self.verticalLayout_44 = QtWidgets.QVBoxLayout(self.frame_39)
+        self.verticalLayout_44.setSpacing(10)
+        self.verticalLayout_44.setObjectName("verticalLayout_44")
+        self.label_32 = QtWidgets.QLabel(self.frame_39)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_32.setFont(font)
+        self.label_32.setStyleSheet("color:white")
+        self.label_32.setObjectName("label_32")
+        self.verticalLayout_44.addWidget(self.label_32)
+
+        
+        self.Stat_Risk_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_3_1.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_3_1.setObjectName("Stat_Risk_Chart_3_1")
+
+
+        self.verticalLayout_44.addWidget(self.Stat_Risk_Chart_3_1)
+
+        
+        self.Stat_Risk_Chart_3_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Risk_Chart_3_2.setHtml(setdefaulthtml)
+        self.Stat_Risk_Chart_3_2.setObjectName("Stat_Risk_Chart_3_2")
+
+        self.verticalLayout_44.addWidget(self.Stat_Risk_Chart_3_2)
+        self.verticalLayout_44.setStretch(0, 2)
+        self.verticalLayout_44.setStretch(1, 10)
+        self.verticalLayout_44.setStretch(2, 16)
+        self.horizontalLayout_22.addWidget(self.frame_39)
+        self.horizontalLayout_20.addWidget(self.frame_38)
+        self.horizontalLayout_21.addLayout(self.horizontalLayout_20)
+        self.stackedWidget.addWidget(self.Risk_stat)
+        self.Process_stat = QtWidgets.QWidget()
+        self.Process_stat.setObjectName("Process_stat")
+        self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.Process_stat)
+        self.horizontalLayout_24.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_24.setSpacing(0)
+        self.horizontalLayout_24.setObjectName("horizontalLayout_24")
+        self.horizontalLayout_23 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_23.setObjectName("horizontalLayout_23")
+        self.frame_42 = QtWidgets.QFrame(self.Process_stat)
+        self.frame_42.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_42.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_42.setObjectName("frame_42")
+        self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.frame_42)
+        self.horizontalLayout_25.setObjectName("horizontalLayout_25")
+        self.frame_46 = QtWidgets.QFrame(self.frame_42)
+        self.frame_46.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_46.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_46.setObjectName("frame_46")
+        self.verticalLayout_45 = QtWidgets.QVBoxLayout(self.frame_46)
+        self.verticalLayout_45.setObjectName("verticalLayout_45")
+        self.label_36 = QtWidgets.QLabel(self.frame_46)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_36.setFont(font)
+        self.label_36.setStyleSheet("color:white")
+        self.label_36.setObjectName("label_36")
+        self.verticalLayout_45.addWidget(self.label_36)
+        
+        self.Stat_Process_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_1_1.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_1_1.setObjectName("Stat_Process_Chart_1_1")
+
+        self.verticalLayout_45.addWidget(self.Stat_Process_Chart_1_1)
+       
+        self.Stat_Process_Chart_1_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_1_2.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_1_2.setObjectName("Stat_Process_Chart_1_2")
+
+
+        self.verticalLayout_45.addWidget(self.Stat_Process_Chart_1_2)
+        self.verticalLayout_45.setStretch(0, 2)
+        self.verticalLayout_45.setStretch(1, 10)
+        self.verticalLayout_45.setStretch(2, 16)
+        self.horizontalLayout_25.addWidget(self.frame_46)
+        self.frame_45 = QtWidgets.QFrame(self.frame_42)
+        self.frame_45.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_45.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_45.setObjectName("frame_45")
+        self.verticalLayout_46 = QtWidgets.QVBoxLayout(self.frame_45)
+        self.verticalLayout_46.setObjectName("verticalLayout_46")
+        self.label_34 = QtWidgets.QLabel(self.frame_45)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_34.setFont(font)
+        self.label_34.setStyleSheet("color:white")
+        self.label_34.setObjectName("label_34")
+        self.verticalLayout_46.addWidget(self.label_34)
+        
+        self.Stat_Process_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_2_1.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_2_1.setObjectName("Stat_Process_Chart_2_1")
+        self.verticalLayout_46.addWidget(self.Stat_Process_Chart_2_1)
+        
+        self.Stat_Process_Chart_2_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_2_2.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_2_2.setObjectName("Stat_Process_Chart_2_2")
+
+        self.verticalLayout_46.addWidget(self.Stat_Process_Chart_2_2)
+        self.verticalLayout_46.setStretch(0, 2)
+        self.verticalLayout_46.setStretch(1, 10)
+        self.verticalLayout_46.setStretch(2, 16)
+        self.horizontalLayout_25.addWidget(self.frame_45)
+        self.frame_43 = QtWidgets.QFrame(self.frame_42)
+        self.frame_43.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_43.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_43.setObjectName("frame_43")
+        self.verticalLayout_48 = QtWidgets.QVBoxLayout(self.frame_43)
+        self.verticalLayout_48.setObjectName("verticalLayout_48")
+        self.label_35 = QtWidgets.QLabel(self.frame_43)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_35.setFont(font)
+        self.label_35.setStyleSheet("color:white")
+        self.label_35.setObjectName("label_35")
+        self.verticalLayout_48.addWidget(self.label_35)
+        
+        self.Stat_Process_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_3_1.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_3_1.setObjectName("Stat_Process_Chart_3_1")
+
+        self.verticalLayout_48.addWidget(self.Stat_Process_Chart_3_1)
+        
+        self.Stat_Process_Chart_3_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_3_2.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_3_2.setObjectName("Stat_Process_Chart_3_2")
+
+
+        self.verticalLayout_48.addWidget(self.Stat_Process_Chart_3_2)
+        self.verticalLayout_48.setStretch(0, 2)
+        self.verticalLayout_48.setStretch(1, 10)
+        self.verticalLayout_48.setStretch(2, 16)
+        self.horizontalLayout_25.addWidget(self.frame_43)
+        self.frame_44 = QtWidgets.QFrame(self.frame_42)
+        self.frame_44.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_44.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_44.setObjectName("frame_44")
+        self.verticalLayout_47 = QtWidgets.QVBoxLayout(self.frame_44)
+        self.verticalLayout_47.setObjectName("verticalLayout_47")
+        self.label_37 = QtWidgets.QLabel(self.frame_44)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_37.setFont(font)
+        self.label_37.setStyleSheet("color:white")
+        self.label_37.setObjectName("label_37")
+        self.verticalLayout_47.addWidget(self.label_37)
+        
+        self.Stat_Process_Chart_4_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_4_1.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_4_1.setObjectName("Stat_Process_Chart_4_1")
+        self.verticalLayout_47.addWidget(self.Stat_Process_Chart_4_1)
+        
+        self.Stat_Process_Chart_4_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
+        self.Stat_Process_Chart_4_2.setHtml(setdefaulthtml)
+        self.Stat_Process_Chart_4_2.setObjectName("Stat_Process_Chart_4_2")
+
+        self.verticalLayout_47.addWidget(self.Stat_Process_Chart_4_2)
+        self.verticalLayout_47.setStretch(0, 2)
+        self.verticalLayout_47.setStretch(1, 10)
+        self.verticalLayout_47.setStretch(2, 16)
+        self.horizontalLayout_25.addWidget(self.frame_44)
+        self.horizontalLayout_23.addWidget(self.frame_42)
+        self.horizontalLayout_24.addLayout(self.horizontalLayout_23)
+        self.stackedWidget.addWidget(self.Process_stat)
+        self.gridLayout.addWidget(self.stackedWidget, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.processframe)
+        self.horizontalLayout.setStretch(0, 3)
+        self.horizontalLayout.setStretch(1, 10)
+        self.verticalLayout_3.addWidget(self.middleframe)
+        self.topframe = QtWidgets.QFrame(self.mainframe)
+        self.topframe.setFrameShape(QtWidgets.QFrame.WinPanel)
+        self.topframe.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.topframe.setObjectName("topframe")
+        self.verticalLayout_3.addWidget(self.topframe)
+        self.verticalLayout_3.setStretch(0, 1)
+        self.verticalLayout_3.setStretch(1, 40)
+        self.verticalLayout_3.setStretch(2, 1)
+        self.verticalLayout.addWidget(self.mainframe)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
+        self.retranslateUi(Form)
+        self.PPCategory_listWidget.item(0).setSelected(True)
+        self.PPCategory_listWidget.setEnabled(True)
+        ###################My Fixed######################
+        ################################
+        self.OtherCategory_listWidget.setEnabled(True)
+        self.connect2allwidgetlistener()
+        #################################################
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+        # CENTER ALIGNING LABELS
+        self.label_34.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_35.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_36.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_37.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_30.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_31.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_32.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_21.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_22.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_23.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_25.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_26.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_27.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_28.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_29.setAlignment(QtCore.Qt.AlignCenter)
+
+    def genSankey(self, df, cat_cols=[], value_cols='', title='Sankey Diagram'):
             # maximum of 6 value cols -> 6 colors
             colorPalette = sns.color_palette("Set2", len(cat_cols)).as_hex()
             labelList = []
@@ -1223,7 +1758,39 @@ class Ui_Form(object):
             fig = dict(data=[data], layout=layout)
             return fig
 
-        fig = genSankey(source_excel,
+    def source_file(self, df):
+        self.file = pandas.read_excel(df ,sheet_name="Sheet1")
+        return self.file
+
+    def data(self):
+        global filename
+        filename = QtWidgets.QFileDialog.getOpenFileName(None, "Select a file", "", "Excel files (*.csv *.xlsx)")[0]
+        self.RCMInput_lineEdi_50.setText(filename)
+
+        if filename:
+            self.source_file(filename)
+            self.set_property
+            self.show_charts()
+    
+    @property
+    def set_property(self):
+        self.process_domain_value.setText(self.open_sheet("Process Domain"))
+        self.business_units_value.setText(self.open_sheet("Business Unit"))
+        self.risks_value.setText(self.open_sheet("Risk ID"))
+        self.controls_value.setText(self.open_sheet("Control ID"))
+        self.owners_value.setText(self.open_sheet("Control Owner"))
+
+        key_non_key = self.key_non_key_func()
+
+        key_non_key_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
+
+        key_non_key_html += plotly.offline.plot(key_non_key,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        key_non_key_html+='</body></html>'
+
+        fig = self.genSankey(self.source_file(filename),
                         cat_cols=['Process Domain', 'Risk ID', 'Control ID'],
                         value_cols='count_data',
                         title='Sankey Diagram(Process VS Risk VS Control)')
@@ -1234,55 +1801,10 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
         html += '</body></html>'
 
-        self.webEngineView = QtWebEngineWidgets.QWebEngineView(self.frame_25)
-        self.webEngineView.setZoomFactor(1.14)
         self.webEngineView.setHtml(html)
-        self.verticalLayout_29.addWidget(self.webEngineView)
 
-        self.horizontalLayout_17.addWidget(self.frame_25)
-        self.verticalLayout_23.addWidget(self.frame_19)
-        self.verticalLayout_23.setStretch(0, 2)
-        self.verticalLayout_23.setStretch(1, 7)
-        # self.verticalLayout_20.addWidget(self.frame_17)
-        self.verticalLayout_22.addLayout(self.verticalLayout_20)
-        self.stackedWidget.addWidget(self.PRC_stat)
-        self.Control_stat = QtWidgets.QWidget()
-        self.Control_stat.setObjectName("Control_stat")
-        self.verticalLayout_32 = QtWidgets.QVBoxLayout(self.Control_stat)
-        self.verticalLayout_32.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_32.setSpacing(0)
-        self.verticalLayout_32.setObjectName("verticalLayout_32")
-        self.verticalLayout_31 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_31.setObjectName("verticalLayout_31")
-        self.frame_27 = QtWidgets.QFrame(self.Control_stat)
-        self.frame_27.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_27.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_27.setObjectName("frame_27")
-        self.verticalLayout_33 = QtWidgets.QVBoxLayout(self.frame_27)
-        self.verticalLayout_33.setObjectName("verticalLayout_33")
-        self.frame_29 = QtWidgets.QFrame(self.frame_27)
-        self.frame_29.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_29.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_29.setObjectName("frame_29")
-        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.frame_29)
-        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
-        self.frame_30 = QtWidgets.QFrame(self.frame_29)
-        self.frame_30.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_30.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_30.setObjectName("frame_30")
-        self.verticalLayout_38 = QtWidgets.QVBoxLayout(self.frame_30)
-        self.verticalLayout_38.setObjectName("verticalLayout_38")
-        self.label_21 = QtWidgets.QLabel(self.frame_30)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_21.setFont(font)
-        self.label_21.setStyleSheet("color:white")
-        self.label_21.setObjectName("label_21")
-        self.verticalLayout_38.addWidget(self.label_21)
-
-        # CONTROL ASSOCIATED TO PROCESS CHART
+        # ALL CHARTS SET
+# CONTROL ASSOCIATED TO PROCESS CHART
         control_process = self.piechart("Process Domain", "Control ID")
 
         control_process_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
@@ -1292,32 +1814,8 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
 
         control_process_html+='</body></html>'
-        
-        self.Stat_Control_1_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_1_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_1_Chart.setObjectName("Stat_Control_1_Chart")
 
-        self.verticalLayout_38.addWidget(self.Stat_Control_1_Chart)
-        self.verticalLayout_38.setStretch(0, 3)
-        self.verticalLayout_38.setStretch(1, 24)
-        self.horizontalLayout_19.addWidget(self.frame_30)
-        self.frame_31 = QtWidgets.QFrame(self.frame_29)
-        self.frame_31.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_31.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_31.setObjectName("frame_31")
-        self.verticalLayout_37 = QtWidgets.QVBoxLayout(self.frame_31)
-        self.verticalLayout_37.setObjectName("verticalLayout_37")
-        self.label_22 = QtWidgets.QLabel(self.frame_31)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_22.setFont(font)
-        self.label_22.setStyleSheet("color:white")
-        self.label_22.setObjectName("label_22")
-        self.verticalLayout_37.addWidget(self.label_22)
-
-        # CONTROL ASSOCIATED TO RISK CHART
+         # CONTROL ASSOCIATED TO RISK CHART
         control_risk = self.piechart("Risk ID", "Control ID")
 
         control_risk_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
@@ -1327,30 +1825,6 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
 
         control_risk_html+='</body></html>'
-
-        self.Stat_Control_2_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_2_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_2_Chart.setObjectName("Stat_Control_2_Chart")
-
-        self.verticalLayout_37.addWidget(self.Stat_Control_2_Chart)
-        self.verticalLayout_37.setStretch(0, 3)
-        self.verticalLayout_37.setStretch(1, 24)
-        self.horizontalLayout_19.addWidget(self.frame_31)
-        self.frame_32 = QtWidgets.QFrame(self.frame_29)
-        self.frame_32.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_32.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_32.setObjectName("frame_32")
-        self.verticalLayout_36 = QtWidgets.QVBoxLayout(self.frame_32)
-        self.verticalLayout_36.setObjectName("verticalLayout_36")
-        self.label_23 = QtWidgets.QLabel(self.frame_32)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_23.setFont(font)
-        self.label_23.setStyleSheet("color:white")
-        self.label_23.setObjectName("label_23")
-        self.verticalLayout_36.addWidget(self.label_23)
         # CONTROL ASSOCIATED TO PROCESS CHART
         control_control_owner = self.piechart("Control Owner", "Control ID")
 
@@ -1361,31 +1835,6 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
 
         control_control_owner_html+='</body></html>'
-
-        self.Stat_Control_3_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_3_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_3_Chart.setObjectName("Stat_Control_3_Chart")
-
-
-        self.verticalLayout_36.addWidget(self.Stat_Control_3_Chart)
-        self.verticalLayout_36.setStretch(0, 3)
-        self.verticalLayout_36.setStretch(1, 24)
-        self.horizontalLayout_19.addWidget(self.frame_32)
-        self.frame_33 = QtWidgets.QFrame(self.frame_29)
-        self.frame_33.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_33.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_33.setObjectName("frame_33")
-        self.verticalLayout_34 = QtWidgets.QVBoxLayout(self.frame_33)
-        self.verticalLayout_34.setObjectName("verticalLayout_34")
-        self.label_25 = QtWidgets.QLabel(self.frame_33)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_25.setFont(font)
-        self.label_25.setStyleSheet("color:white")
-        self.label_25.setObjectName("label_25")
-        self.verticalLayout_34.addWidget(self.label_25)
         # CONTROL ASSOCIATED TO Business Unit CHART
         control_business_unit = self.piechart("Business Unit", "Control ID")
 
@@ -1397,37 +1846,6 @@ class Ui_Form(object):
 
         control_business_unit_html+='</body></html>'
 
-        self.Stat_Control_4_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_4_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_4_Chart.setObjectName("Stat_Control_4_Chart")
-
-
-        self.verticalLayout_34.addWidget(self.Stat_Control_4_Chart)
-        self.verticalLayout_34.setStretch(0, 3)
-        self.verticalLayout_34.setStretch(1, 24)
-        self.horizontalLayout_19.addWidget(self.frame_33)
-        self.verticalLayout_33.addWidget(self.frame_29)
-        self.frame_28 = QtWidgets.QFrame(self.frame_27)
-        self.frame_28.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_28.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_28.setObjectName("frame_28")
-        self.horizontalLayout_18 = QtWidgets.QHBoxLayout(self.frame_28)
-        self.horizontalLayout_18.setObjectName("horizontalLayout_18")
-        self.frame_34 = QtWidgets.QFrame(self.frame_28)
-        self.frame_34.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_34.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_34.setObjectName("frame_34")
-        self.verticalLayout_35 = QtWidgets.QVBoxLayout(self.frame_34)
-        self.verticalLayout_35.setObjectName("verticalLayout_35")
-        self.label_29 = QtWidgets.QLabel(self.frame_34)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_29.setFont(font)
-        self.label_29.setStyleSheet("color:white")
-        self.label_29.setObjectName("label_29")
-        self.verticalLayout_35.addWidget(self.label_29)
         control_control_type_MSA = self.piechart("Control Type (Manual, Semi-automated, Automated)", "Control ID")
 
         control_control_type_MSA_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
@@ -1438,29 +1856,6 @@ class Ui_Form(object):
 
         control_control_type_MSA_html+='</body></html>'
 
-        self.Stat_Control_5_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_5_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_5_Chart.setObjectName("Stat_Control_5_Chart")
-
-        self.verticalLayout_35.addWidget(self.Stat_Control_5_Chart)
-        self.verticalLayout_35.setStretch(0, 1)
-        self.verticalLayout_35.setStretch(1, 20)
-        self.horizontalLayout_18.addWidget(self.frame_34)
-        self.frame_35 = QtWidgets.QFrame(self.frame_28)
-        self.frame_35.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_35.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_35.setObjectName("frame_35")
-        self.verticalLayout_41 = QtWidgets.QVBoxLayout(self.frame_35)
-        self.verticalLayout_41.setObjectName("verticalLayout_41")
-        self.label_28 = QtWidgets.QLabel(self.frame_35)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_28.setFont(font)
-        self.label_28.setStyleSheet("color:white")
-        self.label_28.setObjectName("label_28")
-        self.verticalLayout_41.addWidget(self.label_28)
         control_control_type_PD = self.piechart("Control Type (Preventive , Detective)", "Control ID")
 
         control_control_type_PD_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
@@ -1471,30 +1866,6 @@ class Ui_Form(object):
 
         control_control_type_PD_html+='</body></html>'
 
-        self.Stat_Control_6_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_6_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_6_Chart.setObjectName("Stat_Control_6_Chart")
-        self.key_non_key_func()
-
-        self.verticalLayout_41.addWidget(self.Stat_Control_6_Chart)
-        self.verticalLayout_41.setStretch(0, 1)
-        self.verticalLayout_41.setStretch(1, 20)
-        self.horizontalLayout_18.addWidget(self.frame_35)
-        self.frame_36 = QtWidgets.QFrame(self.frame_28)
-        self.frame_36.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_36.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_36.setObjectName("frame_36")
-        self.verticalLayout_40 = QtWidgets.QVBoxLayout(self.frame_36)
-        self.verticalLayout_40.setObjectName("verticalLayout_40")
-        self.label_27 = QtWidgets.QLabel(self.frame_36)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_27.setFont(font)
-        self.label_27.setStyleSheet("color:white")
-        self.label_27.setObjectName("label_27")
-        self.verticalLayout_40.addWidget(self.label_27)
         control_freq_type = self.piechart("Control Frequency", "Control ID")
 
         control_freq_type_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
@@ -1504,86 +1875,6 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
 
         control_freq_type_html+='</body></html>'
-
-        self.Stat_Control_7_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_7_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_7_Chart.setObjectName("Stat_Control_7_Chart")
-
-        self.verticalLayout_40.addWidget(self.Stat_Control_7_Chart)
-        self.verticalLayout_40.setStretch(0, 1)
-        self.verticalLayout_40.setStretch(1, 20)
-        self.horizontalLayout_18.addWidget(self.frame_36)
-        self.frame_37 = QtWidgets.QFrame(self.frame_28)
-        self.frame_37.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_37.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_37.setObjectName("frame_37")
-        self.verticalLayout_39 = QtWidgets.QVBoxLayout(self.frame_37)
-        self.verticalLayout_39.setObjectName("verticalLayout_39")
-        self.label_26 = QtWidgets.QLabel(self.frame_37)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_26.setFont(font)
-        self.label_26.setStyleSheet("color:white")
-        self.label_26.setObjectName("label_26")
-        self.verticalLayout_39.addWidget(self.label_26)
-        key_non_key = self.key_non_key_func()
-
-        key_non_key_html = '<html><body style="width: 310px; overflow:hidden;background-color:rgb(56, 56, 56);">'
-
-        key_non_key_html += plotly.offline.plot(key_non_key,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        key_non_key_html+='</body></html>'
-
-        self.Stat_Control_8_Chart = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Control_8_Chart.setHtml(setdefaulthtml)
-        self.Stat_Control_8_Chart.setObjectName("Stat_Control_8_Chart")
-        self.verticalLayout_39.addWidget(self.Stat_Control_8_Chart)
-        self.verticalLayout_39.setStretch(0, 3)
-        self.verticalLayout_39.setStretch(1, 24)
-        self.horizontalLayout_18.addWidget(self.frame_37)
-        self.verticalLayout_33.addWidget(self.frame_28)
-        self.verticalLayout_33.setStretch(0, 1)
-        self.verticalLayout_33.setStretch(1, 1)
-        self.verticalLayout_31.addWidget(self.frame_27)
-        self.verticalLayout_32.addLayout(self.verticalLayout_31)
-        self.stackedWidget.addWidget(self.Control_stat)
-        self.Risk_stat = QtWidgets.QWidget()
-        self.Risk_stat.setObjectName("Risk_stat")
-        self.horizontalLayout_21 = QtWidgets.QHBoxLayout(self.Risk_stat)
-        self.horizontalLayout_21.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_21.setSpacing(0)
-        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
-        self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_20.setSpacing(50)
-        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
-        self.frame_38 = QtWidgets.QFrame(self.Risk_stat)
-        self.frame_38.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_38.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_38.setObjectName("frame_38")
-        self.horizontalLayout_22 = QtWidgets.QHBoxLayout(self.frame_38)
-        self.horizontalLayout_22.setContentsMargins(30, 0, 30, 0)
-        self.horizontalLayout_22.setSpacing(40)
-        self.horizontalLayout_22.setObjectName("horizontalLayout_22")
-        self.frame_41 = QtWidgets.QFrame(self.frame_38)
-        self.frame_41.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_41.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_41.setObjectName("frame_41")
-        self.verticalLayout_42 = QtWidgets.QVBoxLayout(self.frame_41)
-        self.verticalLayout_42.setSpacing(10)
-        self.verticalLayout_42.setObjectName("verticalLayout_42")
-        self.label_30 = QtWidgets.QLabel(self.frame_41)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_30.setFont(font)
-        self.label_30.setStyleSheet("color:white")
-        self.label_30.setObjectName("label_30")
-        self.verticalLayout_42.addWidget(self.label_30)
 
         # RISK ASSOCIATED TO PROCESS CHART
         risk_process = self.piechart("Process Domain", "Risk ID")
@@ -1596,51 +1887,6 @@ class Ui_Form(object):
 
         risk_process_html+='</body></html>'
 
-        self.Stat_Risk_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_1_1.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_1_1.setObjectName("Stat_Risk_Chart_1_1")
-
-
-        self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_1)
-
-
-        risk_process_barchart = self.bargraph("Process Domain", "Risk ID")
-
-        risk_process_barchart_html = '<html><body>'
-
-        risk_process_barchart_html += plotly.offline.plot(risk_process_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        risk_process_barchart_html+='</body></html>'
-
-        self.Stat_Risk_Chart_1_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_1_2.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_1_2.setObjectName("Stat_Risk_Chart_1_2")
-
-
-        self.verticalLayout_42.addWidget(self.Stat_Risk_Chart_1_2)
-        self.verticalLayout_42.setStretch(0, 2)
-        self.verticalLayout_42.setStretch(1, 10)
-        self.verticalLayout_42.setStretch(2, 16)
-        self.horizontalLayout_22.addWidget(self.frame_41)
-        self.frame_40 = QtWidgets.QFrame(self.frame_38)
-        self.frame_40.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_40.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_40.setObjectName("frame_40")
-        self.verticalLayout_43 = QtWidgets.QVBoxLayout(self.frame_40)
-        self.verticalLayout_43.setSpacing(10)
-        self.verticalLayout_43.setObjectName("verticalLayout_43")
-        self.label_31 = QtWidgets.QLabel(self.frame_40)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_31.setFont(font)
-        self.label_31.setStyleSheet("color:white")
-        self.label_31.setObjectName("label_31")
-        self.verticalLayout_43.addWidget(self.label_31)
-
                 # RISK ASSOCIATED TO CONTROL CHART
         risk_control = self.piechart("Control ID", "Risk ID")
 
@@ -1651,48 +1897,6 @@ class Ui_Form(object):
                                     include_plotlyjs='cdn')
 
         risk_control_html+='</body></html>'
-
-        self.Stat_Risk_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_2_1.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_2_1.setObjectName("Stat_Risk_Chart_2_1")
-
-        self.verticalLayout_43.addWidget(self.Stat_Risk_Chart_2_1)
-
-        risk_controlid_barchart = self.bargraph("Control ID", "Risk ID")
-
-        risk_controlid_barchart_html = '<html><body>'
-
-        risk_controlid_barchart_html += plotly.offline.plot(risk_controlid_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        risk_controlid_barchart_html+='</body></html>'
-
-        self.Stat_Risk_Chart_2_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_2_2.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_2_2.setObjectName("Stat_Risk_Chart_2_2")
-
-        self.verticalLayout_43.addWidget(self.Stat_Risk_Chart_2_2)
-        self.verticalLayout_43.setStretch(0, 2)
-        self.verticalLayout_43.setStretch(1, 10)
-        self.verticalLayout_43.setStretch(2, 16)
-        self.horizontalLayout_22.addWidget(self.frame_40)
-        self.frame_39 = QtWidgets.QFrame(self.frame_38)
-        self.frame_39.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_39.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_39.setObjectName("frame_39")
-        self.verticalLayout_44 = QtWidgets.QVBoxLayout(self.frame_39)
-        self.verticalLayout_44.setSpacing(10)
-        self.verticalLayout_44.setObjectName("verticalLayout_44")
-        self.label_32 = QtWidgets.QLabel(self.frame_39)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_32.setFont(font)
-        self.label_32.setStyleSheet("color:white")
-        self.label_32.setObjectName("label_32")
-        self.verticalLayout_44.addWidget(self.label_32)
 
         # RISK ASSOCIATED TO BUSINESS UNIT CHART
 
@@ -1706,64 +1910,6 @@ class Ui_Form(object):
 
         risk_business_unit_html+='</body></html>'
 
-        self.Stat_Risk_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_3_1.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_3_1.setObjectName("Stat_Risk_Chart_3_1")
-
-
-        self.verticalLayout_44.addWidget(self.Stat_Risk_Chart_3_1)
-
-        risk_business_domain_barchart = self.bargraph("Business Unit", "Risk ID")
-
-        risk_business_domain_barchart_html = '<html><body>'
-
-        risk_business_domain_barchart_html += plotly.offline.plot(risk_business_domain_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        risk_business_domain_barchart_html+='</body></html>'
-
-        self.Stat_Risk_Chart_3_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Risk_Chart_3_2.setHtml(setdefaulthtml)
-        self.Stat_Risk_Chart_3_2.setObjectName("Stat_Risk_Chart_3_2")
-
-        self.verticalLayout_44.addWidget(self.Stat_Risk_Chart_3_2)
-        self.verticalLayout_44.setStretch(0, 2)
-        self.verticalLayout_44.setStretch(1, 10)
-        self.verticalLayout_44.setStretch(2, 16)
-        self.horizontalLayout_22.addWidget(self.frame_39)
-        self.horizontalLayout_20.addWidget(self.frame_38)
-        self.horizontalLayout_21.addLayout(self.horizontalLayout_20)
-        self.stackedWidget.addWidget(self.Risk_stat)
-        self.Process_stat = QtWidgets.QWidget()
-        self.Process_stat.setObjectName("Process_stat")
-        self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.Process_stat)
-        self.horizontalLayout_24.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_24.setSpacing(0)
-        self.horizontalLayout_24.setObjectName("horizontalLayout_24")
-        self.horizontalLayout_23 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_23.setObjectName("horizontalLayout_23")
-        self.frame_42 = QtWidgets.QFrame(self.Process_stat)
-        self.frame_42.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_42.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_42.setObjectName("frame_42")
-        self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.frame_42)
-        self.horizontalLayout_25.setObjectName("horizontalLayout_25")
-        self.frame_46 = QtWidgets.QFrame(self.frame_42)
-        self.frame_46.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_46.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_46.setObjectName("frame_46")
-        self.verticalLayout_45 = QtWidgets.QVBoxLayout(self.frame_46)
-        self.verticalLayout_45.setObjectName("verticalLayout_45")
-        self.label_36 = QtWidgets.QLabel(self.frame_46)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_36.setFont(font)
-        self.label_36.setStyleSheet("color:white")
-        self.label_36.setObjectName("label_36")
-        self.verticalLayout_45.addWidget(self.label_36)
                 # Process ASSOCIATED TO PROCESS DOMAIN CHART
         process_processdomain = self.piechart("Process Domain", "Process ID")
 
@@ -1775,48 +1921,6 @@ class Ui_Form(object):
 
         process_processdomain_html+='</body></html>'
 
-        self.Stat_Process_Chart_1_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_1_1.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_1_1.setObjectName("Stat_Process_Chart_1_1")
-
-        self.verticalLayout_45.addWidget(self.Stat_Process_Chart_1_1)
-       
-
-        process_process_domain_barchart = self.bargraph("Process Domain", "Process ID")
-
-        process_process_domain_barchart_html = '<html><body>'
-
-        process_process_domain_barchart_html += plotly.offline.plot(process_process_domain_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        process_process_domain_barchart_html+='</body></html>'
-
-        self.Stat_Process_Chart_1_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_1_2.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_1_2.setObjectName("Stat_Process_Chart_1_2")
-
-
-        self.verticalLayout_45.addWidget(self.Stat_Process_Chart_1_2)
-        self.verticalLayout_45.setStretch(0, 2)
-        self.verticalLayout_45.setStretch(1, 10)
-        self.verticalLayout_45.setStretch(2, 16)
-        self.horizontalLayout_25.addWidget(self.frame_46)
-        self.frame_45 = QtWidgets.QFrame(self.frame_42)
-        self.frame_45.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_45.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_45.setObjectName("frame_45")
-        self.verticalLayout_46 = QtWidgets.QVBoxLayout(self.frame_45)
-        self.verticalLayout_46.setObjectName("verticalLayout_46")
-        self.label_34 = QtWidgets.QLabel(self.frame_45)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_34.setFont(font)
-        self.label_34.setStyleSheet("color:white")
-        self.label_34.setObjectName("label_34")
-        self.verticalLayout_46.addWidget(self.label_34)
          # Process ASSOCIATED TO Business Unit CHART
         process_business_unit = self.piechart("Business Unit", "Process ID")
 
@@ -1828,47 +1932,6 @@ class Ui_Form(object):
 
         process_business_unit_html+='</body></html>'
 
-        self.Stat_Process_Chart_2_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_2_1.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_2_1.setObjectName("Stat_Process_Chart_2_1")
-        self.verticalLayout_46.addWidget(self.Stat_Process_Chart_2_1)
-        
-        
-        process_business_unit_barchart = self.bargraph("Business Unit", "Process ID")
-
-        process_business_unit_barchart_html = '<html><body>'
-
-        process_business_unit_barchart_html += plotly.offline.plot(process_business_unit_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        process_business_unit_barchart_html+='</body></html>'
-
-        self.Stat_Process_Chart_2_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_2_2.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_2_2.setObjectName("Stat_Process_Chart_2_2")
-
-
-        self.verticalLayout_46.addWidget(self.Stat_Process_Chart_2_2)
-        self.verticalLayout_46.setStretch(0, 2)
-        self.verticalLayout_46.setStretch(1, 10)
-        self.verticalLayout_46.setStretch(2, 16)
-        self.horizontalLayout_25.addWidget(self.frame_45)
-        self.frame_43 = QtWidgets.QFrame(self.frame_42)
-        self.frame_43.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_43.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_43.setObjectName("frame_43")
-        self.verticalLayout_48 = QtWidgets.QVBoxLayout(self.frame_43)
-        self.verticalLayout_48.setObjectName("verticalLayout_48")
-        self.label_35 = QtWidgets.QLabel(self.frame_43)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_35.setFont(font)
-        self.label_35.setStyleSheet("color:white")
-        self.label_35.setObjectName("label_35")
-        self.verticalLayout_48.addWidget(self.label_35)
          # control ASSOCIATED TO process domain CHART
         processdomain_control = self.piechart("Process Domain", "Control ID")
 
@@ -1880,47 +1943,6 @@ class Ui_Form(object):
 
         processdomain_control_html+='</body></html>'
 
-        self.Stat_Process_Chart_3_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_3_1.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_3_1.setObjectName("Stat_Process_Chart_3_1")
-
-
-        self.verticalLayout_48.addWidget(self.Stat_Process_Chart_3_1)
-        processdomain_control_barchart = self.bargraph("Process Domain", "Control ID")
-
-        processdomain_control_barchart_html = '<html><body>'
-
-        processdomain_control_barchart_html += plotly.offline.plot(processdomain_control_barchart,
-                                    output_type='div',
-                                    include_plotlyjs='cdn')
-
-        processdomain_control_barchart_html+='</body></html>'
-
-        self.Stat_Process_Chart_3_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_3_2.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_3_2.setObjectName("Stat_Process_Chart_3_2")
-
-
-        self.verticalLayout_48.addWidget(self.Stat_Process_Chart_3_2)
-        self.verticalLayout_48.setStretch(0, 2)
-        self.verticalLayout_48.setStretch(1, 10)
-        self.verticalLayout_48.setStretch(2, 16)
-        self.horizontalLayout_25.addWidget(self.frame_43)
-        self.frame_44 = QtWidgets.QFrame(self.frame_42)
-        self.frame_44.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_44.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_44.setObjectName("frame_44")
-        self.verticalLayout_47 = QtWidgets.QVBoxLayout(self.frame_44)
-        self.verticalLayout_47.setObjectName("verticalLayout_47")
-        self.label_37 = QtWidgets.QLabel(self.frame_44)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_37.setFont(font)
-        self.label_37.setStyleSheet("color:white")
-        self.label_37.setObjectName("label_37")
-        self.verticalLayout_47.addWidget(self.label_37)
          # Risk ASSOCIATED TO Process Domain CHART
         processdomain_risk = self.piechart("Process Domain", "Risk ID")
 
@@ -1932,12 +1954,69 @@ class Ui_Form(object):
 
         processdomain_risk_html+='</body></html>'
 
-        self.Stat_Process_Chart_4_1 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_4_1.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_4_1.setObjectName("Stat_Process_Chart_4_1")
-        self.verticalLayout_47.addWidget(self.Stat_Process_Chart_4_1)
-
         
+        # ALL BAR GRAPH SET
+        
+        risk_process_barchart = self.bargraph("Process Domain", "Risk ID")
+
+        risk_process_barchart_html = '<html><body>'
+
+        risk_process_barchart_html += plotly.offline.plot(risk_process_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_process_barchart_html+='</body></html>'
+
+        risk_controlid_barchart = self.bargraph("Control ID", "Risk ID")
+
+        risk_controlid_barchart_html = '<html><body>'
+
+        risk_controlid_barchart_html += plotly.offline.plot(risk_controlid_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_controlid_barchart_html+='</body></html>'
+
+        risk_business_domain_barchart = self.bargraph("Business Unit", "Risk ID")
+
+        risk_business_domain_barchart_html = '<html><body>'
+
+        risk_business_domain_barchart_html += plotly.offline.plot(risk_business_domain_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        risk_business_domain_barchart_html+='</body></html>'
+
+        process_process_domain_barchart = self.bargraph("Process Domain", "Process ID")
+
+        process_process_domain_barchart_html = '<html><body>'
+
+        process_process_domain_barchart_html += plotly.offline.plot(process_process_domain_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        process_process_domain_barchart_html+='</body></html>'
+
+        process_business_unit_barchart = self.bargraph("Business Unit", "Process ID")
+
+        process_business_unit_barchart_html = '<html><body>'
+
+        process_business_unit_barchart_html += plotly.offline.plot(process_business_unit_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        process_business_unit_barchart_html+='</body></html>'
+
+        processdomain_control_barchart = self.bargraph("Process Domain", "Control ID")
+
+        processdomain_control_barchart_html = '<html><body>'
+
+        processdomain_control_barchart_html += plotly.offline.plot(processdomain_control_barchart,
+                                    output_type='div',
+                                    include_plotlyjs='cdn')
+
+        processdomain_control_barchart_html+='</body></html>'
+
         processdomain_riskid_barchart = self.bargraph("Process Domain", "Risk ID")
 
         processdomain_riskid_barchart_html = '<html><body>'
@@ -1948,74 +2027,6 @@ class Ui_Form(object):
 
         processdomain_riskid_barchart_html+='</body></html>'
 
-        self.Stat_Process_Chart_4_2 = QtWebEngineWidgets.QWebEngineView(self.frame_30)
-        self.Stat_Process_Chart_4_2.setHtml(setdefaulthtml)
-        self.Stat_Process_Chart_4_2.setObjectName("Stat_Process_Chart_4_2")
-
-        self.verticalLayout_47.addWidget(self.Stat_Process_Chart_4_2)
-        self.verticalLayout_47.setStretch(0, 2)
-        self.verticalLayout_47.setStretch(1, 10)
-        self.verticalLayout_47.setStretch(2, 16)
-        self.horizontalLayout_25.addWidget(self.frame_44)
-        self.horizontalLayout_23.addWidget(self.frame_42)
-        self.horizontalLayout_24.addLayout(self.horizontalLayout_23)
-        self.stackedWidget.addWidget(self.Process_stat)
-        self.gridLayout.addWidget(self.stackedWidget, 0, 0, 1, 1)
-        self.horizontalLayout.addWidget(self.processframe)
-        self.horizontalLayout.setStretch(0, 3)
-        self.horizontalLayout.setStretch(1, 10)
-        self.verticalLayout_3.addWidget(self.middleframe)
-        self.topframe = QtWidgets.QFrame(self.mainframe)
-        self.topframe.setFrameShape(QtWidgets.QFrame.WinPanel)
-        self.topframe.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.topframe.setObjectName("topframe")
-        self.verticalLayout_3.addWidget(self.topframe)
-        self.verticalLayout_3.setStretch(0, 1)
-        self.verticalLayout_3.setStretch(1, 40)
-        self.verticalLayout_3.setStretch(2, 1)
-        self.verticalLayout.addWidget(self.mainframe)
-        self.verticalLayout_2.addLayout(self.verticalLayout)
-
-        self.retranslateUi(Form)
-        self.PPCategory_listWidget.item(0).setSelected(True)
-        self.PPCategory_listWidget.setEnabled(True)
-        ###################My Fixed######################
-        ################################
-        self.OtherCategory_listWidget.setEnabled(True)
-        self.connect2allwidgetlistener()
-        #################################################
-        QtCore.QMetaObject.connectSlotsByName(Form)
-
-        # CENTER ALIGNING LABELS
-        self.label_34.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_35.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_36.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_37.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_30.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_31.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_32.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_21.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_22.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_23.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_25.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_26.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_27.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_28.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_29.setAlignment(QtCore.Qt.AlignCenter)
-
-
-    def data(self):
-        filename = QtWidgets.QFileDialog.getOpenFileName(None, "Select a file", "", "Excel files (*.csv *.xlsx)")[0]
-        self.RCMInput_lineEdi_50.setText(filename)
-        source_excel = filename
-        if filename:
-            target_path = "static\do not delete.xlsx"
-            shutil.copyfile(filename, target_path)
-            os.system('python run.py')
-            sys.exit()
-            
-    def show_charts(self):
-        self.verticalLayout_20.addWidget(self.frame_17)
         # SETTING HTML FOR CHARTS
         self.Stat_Control_1_Chart.setHtml(control_process_html)
         self.Stat_Control_2_Chart.setHtml(control_risk_html)
@@ -2041,6 +2052,9 @@ class Ui_Form(object):
         self.Stat_Process_Chart_3_2.setHtml(processdomain_control_barchart_html)
         self.Stat_Process_Chart_4_1.setHtml(processdomain_risk_html)
         self.Stat_Process_Chart_4_2.setHtml(processdomain_riskid_barchart_html)
+        
+    def show_charts(self):
+        self.verticalLayout_20.addWidget(self.frame_17)
         
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -2139,25 +2153,6 @@ class Ui_Form(object):
         self.RCM_progressBar_3.setValue(0)
         input_folder_path_rcm = filename
 
-    # def data(self):
-    #     global spreadsheet_filename
-    #     # filename = QFileDialog.getOpenFileName(self, 'Open file', 
-    #     #  'c:',"Excel files (*.xlsx *.csv)")
-    #     # self.RCMInput_lineEdi_50.setText(filename)
-    #     # input_folder_path_rcm = filename
-
-    #     dlg = QtWidgets.QFileDialog()
-    #     dlg.setFileMode(QtWidgets.QFileDialog.AnyFile)
-    #     dlg.setFilter("Text files (*.xlsx *.csv)")
-    #     # self.RCM_progressBar_3.setValue(0)
-        
-    #     filenames = dlg.selectedFiles()
-    #     f = filenames[0]
-
-    #     self.RCMInput_pushButton_50.setText(f)
-    #     spreadsheet_filename = f
-
-    
     def clear_data(self):
          # REMOVING
         self.verticalLayout_20.removeWidget(self.frame_17)
@@ -2464,13 +2459,13 @@ class Ui_Form(object):
         self.stackedWidget.setCurrentIndex(i + 2)
 
     def open_sheet(self, column):
-        df = source_excel
+        df = self.source_file(filename)
         _uniq = df[column].unique()
         len_uniq = len(_uniq)
         return str(len_uniq)
 
     def piechart(self, first, second):
-            df = source_excel
+            df = self.source_file(filename)
 
             labels = df[f"{first}"].unique()
 
@@ -2487,7 +2482,7 @@ class Ui_Form(object):
             return fig
 
     def key_non_key_func(self):
-            df = source_excel
+            df = self.source_file(filename)
 
             labels = df["Key control"].unique()
             key_controls = list(df["Key control"])
@@ -2505,7 +2500,7 @@ class Ui_Form(object):
             return fig
 
     def bargraph(self, first, second):
-            df = source_excel
+            df = self.source_file(filename)
 
             labels = df[f"{first}"].unique()
 
@@ -2629,7 +2624,6 @@ class Ui_Form(object):
         #############################################################
         self.RCMContent_tableWidget_2.setColumnCount(columns)
         self.RCMContent_tableWidget_2.setRowCount(rows)
-        # self.setAutoFillBackground(True)
 
         self.RCMContent_tableWidget_2.setHorizontalHeaderLabels(data.columns)
 
@@ -2678,17 +2672,11 @@ class Ui_Form(object):
 
         ################################################################
     def reset(self):
-        self.OtherCategory_listWidget.setEnabled(False)
-        self.OtherCategory_listWidget.setStyleSheet(
-            "QListView::item {\n"
-            "      color:silver;\n"
-            "      background-color:grey;\n"
-            "  }")
         self.RCMOutput_LineText.clear()
         self.RCMInput_lineEdi_2.clear()
         self.PPOutput_lineEdit.clear()
         self.PP_progressBar_2.setValue(0)
-        self.RCM_progressBar_2.setValue(0)
+        self.RCM_progressBar_3.setValue(0)
         self.PPInput_lineEdit.clear()
         self.PPFile_listWidget_2.clear()
         self.PPContent_textEdit_2.clear()
@@ -2700,6 +2688,7 @@ class Ui_Form(object):
         self.Stat_RCM_Names_listWidget.clear()
         self.Stat_RCM_Location_Label.clear()
         self.Stat_Total_Number_Label.setText('0')
+        self.clear_data()
 
     def connect2allwidgetlistener(self):
         #########Category###########
@@ -2717,7 +2706,6 @@ class Ui_Form(object):
         ############RCM Extractor##############
         self.RCMInput_pushButton_2.clicked.connect(self.inputFileInRCM)
         self.RCMInput_pushButton_50.clicked.connect(self.data)
-        self.clear_button.clicked.connect(self.clear_data)
         self.RCMOutput_pushButton_4.clicked.connect(self.outputFileRCM)
         self.RCMConvert_pushButton_2.clicked.connect(self.convertInRCM)
         ################Reset PushButton###############
@@ -2730,7 +2718,6 @@ if __name__ == "__main__":
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
-    # ui.show_charts()
     Form.show()
     sys.exit(app.exec_())
     app.exec_()
